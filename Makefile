@@ -1,19 +1,20 @@
-THEOS_DEVICE_IP = 127.0.0.1
-THEOS_DEVICE_PORT = 22
+# 定义 Theos 安装路径
+THEOS=/opt/theos
+SDKVERSION=12.2
+ARCHS=arm64
+TARGET=iphone:clang:latest:7.0
 
-export THEOS=/opt/theos
-export SDKVERSION=12.2
-export ARCHS = arm64
-export TARGET = iphone:clang:latest:7.0
-
+# 引入 Theos 标准 makefile
 include $(THEOS)/makefiles/common.mk
 
+# 插件名称
 TWEAK_NAME = jdTweak
-jdTweak_FILES = Tweak.xm
-jdTweak_FRAMEWORKS = UIKit Foundation
 
-# 指定文件路径
+# 你的插件 JavaScript 脚本
+jdTweak_FILES = script.js
+
+# 插件安装路径
 jdTweak_INSTALL_PATH = /Library/Application Support/jdTweak
-jdTweak_FILES = script.js  # 将 script.js 文件添加到插件中
 
+# 引入 tweak.mk，确保路径正确
 include $(THEOS_MAKE_PATH)/tweak.mk
