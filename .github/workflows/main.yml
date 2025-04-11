@@ -1,0 +1,59 @@
+name: JD Price CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate-script:
+    name: Script Validation
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        path: 'src'  # 明确指定代码路径
+
+    - name: Verify Script Integrity
+      run: |
+        cd src
+        if [ ! -f jd_price.js ]; then
+          echo "❌ 错误：未找到主脚本文件"
+          exit 1
+        fi
+        echo "::notice title=代码验证::原始脚本文件存在"
+
+  build-deb:
+    name: Build DEB Package
+    needs: validate-script
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: 'src'
+
+    - name: Setup Build Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y make dh-make
+
+    - name: Copy Source
+      run: |
+        mkdir -p pkg-build/usr/share/jd-price
+        cp src/jd_price.js pkg-build/usr/share/jd-price/
+
+    - name: Generate DEB
+      run: |
+        cd pkg-build
+        dh_make --indep --createorig -y -p jd-price_1.0.0
+        echo "usr/share/jd-price" > debian/install
+        dpkg-buildpackage -us -uc
+        mv ../*.deb .
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: jd-price-deb
+        path: pkg-build/*.deb
