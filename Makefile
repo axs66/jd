@@ -13,8 +13,8 @@ PACKAGE_PATH = /var/jb/Library/Application\ Support/jdTweak
 
 # 确保安装所需的资源文件
 after-install::
-    install.exec "mkdir -p $(PACKAGE_PATH)"
-    install.exec "cp $(SRCROOT)/$(JD_FILE) $(PACKAGE_PATH)/$(JD_FILE)"
+	install.exec "mkdir -p $(PACKAGE_PATH)"
+	install.exec "cp $(SRCROOT)/$(JD_FILE) $(PACKAGE_PATH)/$(JD_FILE)"
 
 # 不依赖 Tweak.xm，因为我们只关心资源文件
 include $(THEOS_MAKE_PATH)/aggregate.mk
