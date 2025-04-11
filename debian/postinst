@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+# 创建专用用户
+if ! getent passwd jdprice >/dev/null; then
+    adduser --system --no-create-home --group jdprice
+fi
+
+# 设置权限
+chown -R jdprice:jdprice /usr/share/jd-price
+chmod 755 /usr/share/jd-price/jd_price.js
+
+# 重载服务配置
+systemctl daemon-reload >/dev/null 2>&1 || true
+
+# 自动启动服务
+if [ "$1" = "configure" ]; then
+    systemctl enable jd-price.service >/dev/null 2>&1 || true
+fi
