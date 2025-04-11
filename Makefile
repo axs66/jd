@@ -4,14 +4,23 @@ ARCHS = arm64
 TARGET = iphone:clang:latest:14.0
 
 include $(THEOS)/makefiles/common.mk
+include $(THEOS_MAKE_PATH)/tweak.mk
 
 TWEAK_NAME = jdTweak
-jdTweak_FILES = 
+jdTweak_FILES = Tweak.xm
 jdTweak_FRAMEWORKS = UIKit
 
-# 添加额外资源文件
-after-install::
-	install.exec "mkdir -p /var/jb/Library/Application\ Support/jdTweak"
-	install.exec "cp $(SRCROOT)/script.js /var/jb/Library/Application\ Support/jdTweak/script.js"
+include $(THEOS_MAKE_PATH)/tweak.mk
 
-include $(THEOS_MAKE_PATH)/package.mk
+# 安装额外的资源文件
+after-install::
+	install.exec "mkdir -p /Library/Application\ Support/jdTweak"
+	install.exec "cp $(SRCROOT)/script.js /Library/Application\ Support/jdTweak/script.js"
+
+before-package::
+	@echo "Preparing package for jdTweak"
+
+after-package::
+	@echo "Package for jdTweak created successfully"
+
+# 你可以在这里添加自己的包构建规则，或重新检查现有的规则
