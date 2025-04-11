@@ -1,0 +1,9 @@
+Package: com.axs.jdtweak
+Name: jdTweak
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: 修改输入法键盘背景颜色
+Maintainer: Axs
+Author: Axs
+Section: Tweaks
+Depends: mobilesubstrate
