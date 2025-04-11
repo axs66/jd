@@ -4,6 +4,7 @@ ARCHS = arm64
 TARGET = iphone:clang:latest:14.0
 
 include $(THEOS)/makefiles/common.mk
+include $(THEOS_MAKE_PATH)/tweak.mk
 
 TWEAK_NAME = jdTweak
 jdTweak_FILES = Tweak.xm
