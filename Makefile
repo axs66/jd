@@ -4,23 +4,17 @@ ARCHS = arm64
 TARGET = iphone:clang:latest:14.0
 
 include $(THEOS)/makefiles/common.mk
-include $(THEOS_MAKE_PATH)/tweak.mk
 
 TWEAK_NAME = jdTweak
-jdTweak_FILES = Tweak.xm
-jdTweak_FRAMEWORKS = UIKit
+JD_FILE = script.js  # QX 插件的 JavaScript 文件
 
-include $(THEOS_MAKE_PATH)/tweak.mk
+# 定义 QX 插件的目标路径
+PACKAGE_PATH = /var/jb/Library/Application\ Support/jdTweak
 
-# 安装额外的资源文件
+# 确保安装所需的资源文件
 after-install::
-	install.exec "mkdir -p /Library/Application\ Support/jdTweak"
-	install.exec "cp $(SRCROOT)/script.js /Library/Application\ Support/jdTweak/script.js"
+    install.exec "mkdir -p $(PACKAGE_PATH)"
+    install.exec "cp $(SRCROOT)/$(JD_FILE) $(PACKAGE_PATH)/$(JD_FILE)"
 
-before-package::
-	@echo "Preparing package for jdTweak"
-
-after-package::
-	@echo "Package for jdTweak created successfully"
-
-# 你可以在这里添加自己的包构建规则，或重新检查现有的规则
+# 不依赖 Tweak.xm，因为我们只关心资源文件
+include $(THEOS_MAKE_PATH)/aggregate.mk
