@@ -6,19 +6,17 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repo
         uses: actions/checkout@v3
 
-      - name: Set up Theos
-        uses: axs66/theos-action@main
+      - name: Install dpkg
+        run: sudo apt-get update && sudo apt-get install -y dpkg-dev
 
       - name: Build .deb
         run: |
-          make clean package FINALPACKAGE=1
-          mkdir -p output
-          cp packages/*.deb output/
+          make clean package
 
       - name: Upload .deb to GitHub Releases
         uses: ncipollo/release-action@v1
