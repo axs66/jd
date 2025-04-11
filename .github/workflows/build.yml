@@ -1,12 +1,11 @@
 name: CI
 
-# 仅当 build.yml 文件发生变化时触发工作流
 on:
   push:
     paths:
-      - '.github/workflows/build.yml'  # 监控 build.yml 文件的变化
-      - 'Tweak.xm'  # 增加对 Tweak.xm 文件的监控
-      - 'Makefile'
+      - '.github/workflows/build.yml'  # 监控工作流配置文件的变化
+      - 'Tweak.xm'  # 监控插件源代码文件的变化
+      - 'Makefile'  # 监控构建配置文件的变化
     branches:
       - 'main'  # 仅在推送到 main 分支时触发
 
@@ -20,8 +19,15 @@ jobs:
         with:
           submodules: true
 
-      - name: Use Theos Setup Action
-        uses: axs66/theos-action@main
+      - name: Set up Theos environment
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo 'export THEOS=~/theos' >> ~/.bash_profile
+          echo 'export PATH=$THEOS/bin:$PATH' >> ~/.bash_profile
+          source ~/.bash_profile
+          brew install ldid xz
+          sudo apt-get update
+          sudo apt-get install -y git build-essential fakeroot clang libclang-dev libxml2-dev libssl-dev
 
       - name: Clean previous packages
         run: rm -f ${{ github.workspace }}/packages/*.deb
