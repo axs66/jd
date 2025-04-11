@@ -23,6 +23,6 @@ jobs:
         with:
           artifacts: output/*.deb
           tag: v1.0
-          token: ${{ secrets.API_TOKEN }}
+          token: ${{ secrets.PAT }}
           name: jdTweak v1.0
           body: "自动构建发布的京东 Quantumult X 插件"
