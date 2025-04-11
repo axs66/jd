@@ -1,14 +1,19 @@
-PACKAGE_NAME = jdTweak
-VERSION = 1.0
-ARCH = iphoneos-arm
-OUTPUT_DIR = output
-DEB_NAME = $(PACKAGE_NAME)_$(VERSION)_$(ARCH).deb
+THEOS_DEVICE_IP = 127.0.0.1
+THEOS_DEVICE_PORT = 22
 
-all: package
+export THEOS=/opt/theos
+export SDKVERSION=12.2
+export ARCHS = arm64
+export TARGET = iphone:clang:latest:7.0
 
-package:
-	mkdir -p $(OUTPUT_DIR)
-	dpkg-deb -b . $(OUTPUT_DIR)/$(DEB_NAME)
+include $(THEOS)/makefiles/common.mk
 
-clean:
-	rm -rf $(OUTPUT_DIR)
+TWEAK_NAME = jdTweak
+jdTweak_FILES = Tweak.xm
+jdTweak_FRAMEWORKS = UIKit Foundation
+
+# 指定文件路径
+jdTweak_INSTALL_PATH = /Library/Application Support/jdTweak
+jdTweak_FILES = script.js  # 将 script.js 文件添加到插件中
+
+include $(THEOS_MAKE_PATH)/tweak.mk
