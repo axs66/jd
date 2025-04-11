@@ -1,5 +1,5 @@
-# 设置 Theos 安装路径
-THEOS = /opt/theos
+# 设置 Theos 安装路径，确保 THEOS 指向正确的安装路径
+THEOS = /path/to/your/theos  # 例如：/home/runner/theos
 
 # 插件名称
 TWEAK_NAME = jdTweak
@@ -22,7 +22,7 @@ PACKAGE_VERSION = 1.0
 # 包的安装路径
 FINAL_PACKAGE_PATH = output/jdTweak_$(PACKAGE_VERSION)_iphoneos-arm.deb
 
-# 引入 Theos 的 makefiles
+# 引入 Theos 的 makefiles，确保路径正确
 include $(THEOS)/makefiles/common.mk
 include $(THEOS)/makefiles/tweak.mk
 
