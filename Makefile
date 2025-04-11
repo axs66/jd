@@ -1,20 +1,35 @@
-# 定义 Theos 安装路径
-THEOS=/opt/theos
-SDKVERSION=12.2
-ARCHS=arm64
-TARGET=iphone:clang:latest:7.0
-
-# 引入 Theos 标准 makefile
-include $(THEOS)/makefiles/common.mk
+# 设置 Theos 安装路径
+THEOS = /opt/theos
 
 # 插件名称
 TWEAK_NAME = jdTweak
 
-# 你的插件 JavaScript 脚本
-jdTweak_FILES = script.js
+# 目标平台架构
+ARCHS = arm64
 
-# 插件安装路径
+# 设置安装路径，插件在设备上的安装路径
 jdTweak_INSTALL_PATH = /Library/Application Support/jdTweak
 
-# 引入 tweak.mk，确保路径正确
-include $(THEOS_MAKE_PATH)/tweak.mk
+# 设置目标设备
+TARGET = iphone:clang:latest:7.0
+
+# 指定插件文件
+jdTweak_FILES = script.js
+
+# 包的版本号，可以根据需要修改
+PACKAGE_VERSION = 1.0
+
+# 包的安装路径
+FINAL_PACKAGE_PATH = output/jdTweak_$(PACKAGE_VERSION)_iphoneos-arm.deb
+
+# 引入 Theos 的 makefiles
+include $(THEOS)/makefiles/common.mk
+include $(THEOS)/makefiles/tweak.mk
+
+# 目标定义
+before-package::
+	@echo "开始构建 jdTweak 插件..."
+
+package::
+	@echo "开始打包 jdTweak 插件..."
+	@$(MAKE) package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
