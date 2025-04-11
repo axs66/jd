@@ -1,15 +1,14 @@
-TARGET = iphone:clang:latest:10.0
-ARCHS = arm64
-PACKAGE_VERSION = 1.0
-INSTALL_TARGET_PROCESSES = SpringBoard
+PACKAGE_NAME = jdTweak
+VERSION = 1.0
+ARCH = iphoneos-arm
+OUTPUT_DIR = output
+DEB_NAME = $(PACKAGE_NAME)_$(VERSION)_$(ARCH).deb
 
-include $(THEOS)/makefiles/common.mk
+all: package
 
-TWEAK_NAME = jdTweak
-jdTweak_FILES = Tweak.xm
-jdTweak_STAGE_DIR = $(THEOS_STAGING_DIR)
+package:
+	mkdir -p $(OUTPUT_DIR)
+	dpkg-deb -b . $(OUTPUT_DIR)/$(DEB_NAME)
 
-include $(THEOS_MAKE_PATH)/tweak.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"
+clean:
+	rm -rf $(OUTPUT_DIR)
