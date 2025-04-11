@@ -1,9 +1,9 @@
-Package: jd-price
-Version: 1.3.2
-Section: utils
-Priority: optional
-Architecture: all
+Package: com.axs.jdtweak
+Name: jdTweak
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: 修改输入法键盘背景颜色
 Maintainer: Axs
-Depends: nodejs (>= 18.0), libssl3
-Description: JD Price Comparison Tool
- Real-time price tracking system for JD products
+Author: Axs
+Section: Tweaks
+Depends: mobilesubstrate
