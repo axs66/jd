@@ -6,7 +6,7 @@
   <dict>
     <key>Executables</key>
     <array>
-      <string>JDMobile</string>
+      <string>com.360buy.jdmobile</string>
     </array>
   </dict>
 </dict>
