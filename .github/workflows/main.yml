@@ -1,59 +1,30 @@
-name: JD Price CI/CD
+name: Build jdTweak
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  validate-script:
-    name: Script Validation
-    runs-on: ubuntu-latest
+  build:
+    runs-on: macos-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      with:
-        path: 'src'  # 明确指定代码路径
+      - name: Clone repo
+        uses: actions/checkout@v3
 
-    - name: Verify Script Integrity
-      run: |
-        cd src
-        if [ ! -f jd_price.js ]; then
-          echo "❌ 错误：未找到主脚本文件"
-          exit 1
-        fi
-        echo "::notice title=代码验证::原始脚本文件存在"
+      - name: Set up Theos
+        uses: axs66/theos-action@main
 
-  build-deb:
-    name: Build DEB Package
-    needs: validate-script
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        path: 'src'
+      - name: Build .deb
+        run: |
+          make clean package FINALPACKAGE=1
+          mkdir -p output
+          cp packages/*.deb output/
 
-    - name: Setup Build Environment
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y make dh-make
-
-    - name: Copy Source
-      run: |
-        mkdir -p pkg-build/usr/share/jd-price
-        cp src/jd_price.js pkg-build/usr/share/jd-price/
-
-    - name: Generate DEB
-      run: |
-        cd pkg-build
-        dh_make --indep --createorig -y -p jd-price_1.0.0
-        echo "usr/share/jd-price" > debian/install
-        dpkg-buildpackage -us -uc
-        mv ../*.deb .
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: jd-price-deb
-        path: pkg-build/*.deb
+      - name: Upload .deb to GitHub Releases
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: output/*.deb
+          tag: v1.0
+          token: ${{ secrets.API_TOKEN }}
+          name: jdTweak v1.0
+          body: "自动构建发布的京东 Quantumult X 插件"
